@@ -37,21 +37,18 @@ class TwitterClient(context: Context) : OAuthBaseClient(
         const val REST_URL = "https://api.twitter.com/1.1"
         const val REST_CONSUMER_KEY =
             BuildConfig.CONSUMER_KEY // Change this inside apikey.properties
-
         const val REST_CONSUMER_SECRET =
             BuildConfig.CONSUMER_SECRET // Change this inside apikey.properties
-
         // Landing page to indicate the OAuth flow worked in case Chrome for Android 25+ blocks navigation back to the app.
         const val FALLBACK_URL =
             "https://codepath.github.io/android-rest-client-template/success.html"
-
         // See https://developer.chrome.com/multidevice/android/intents
-        const val REST_CALLBACK_URL_TEMPLATE =
-            "intent://%s#Intent;action=android.intent.action.VIEW;scheme=%s;package=%s;S.browser_fallback_url=%s;end"
+         const val REST_CALLBACK_URL_TEMPLATE =
+        "intent://%s#Intent;action=android.intent.action.VIEW;scheme=%s;package=%s;S.browser_fallback_url=%s;end"
     }
 
 
-    fun getHomeTimeline(handler: JsonHttpResponseHandler) {
+    fun getHomeTimeLine(handler: JsonHttpResponseHandler) {
         val apiUrl =
             getApiUrl("statuses/home_timeline.json")
 
@@ -59,15 +56,27 @@ class TwitterClient(context: Context) : OAuthBaseClient(
         val params = RequestParams()
         params.put("count", "25")
         params.put("since_id", 1)
+
         client.get(apiUrl, params, handler)
     }
 
+    fun publishTweet(tweetContent:String, handler: JsonHttpResponseHandler) {
+        val apiUrl =
+            getApiUrl("statuses/update.json")
+
+        // Can specify query string params directly or through RequestParams.
+        val params = RequestParams()
+        params.put("status", tweetContent)
+
+        client.post(apiUrl, params,"", handler)
+    }
+
     /* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
-	 * 	  i.e getApiUrl("statuses/home_timeline.json")
-	 * 2. Define the parameters to pass to the request (query or body)
-	 *    i.e val params = RequestParams("foo", "bar")
-	 * 3. Define the request method and make a call to the client
-	 *    i.e client.get(apiUrl, params, handler)
-	 *    i.e client.post(apiUrl, params, handler)
-	 */
+    *       i.e getApiUrl("statuses/home_timeline.json")
+    * 2. Define the parameters to pass to the request (query or body)
+    *    i.e val params = RequestParams("foo", "bar")
+    * 3. Define the request method and make a call to the client
+    *    i.e client.get(apiUrl, params, handler)
+    *    i.e client.post(apiUrl, params, handler)
+    */
 }
